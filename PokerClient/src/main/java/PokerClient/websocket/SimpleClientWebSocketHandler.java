@@ -24,6 +24,7 @@ public class SimpleClientWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+
     	controller.serverResposne(message.getPayload());
     }
 

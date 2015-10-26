@@ -44,9 +44,8 @@ public class MainWindowController  {
 
 
 	@FXML public void connectAndIntroduce(ActionEvent event) {
-
 	     try {
-			handler.getSession().sendMessage(new TextMessage(nameField.getText()));
+			handler.getSession().sendMessage(new TextMessage("introduce:"+nameField.getText()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

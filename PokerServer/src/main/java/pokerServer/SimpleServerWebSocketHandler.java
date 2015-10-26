@@ -7,12 +7,21 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import pokerServer.messageConverter.MessageConverter;
+import pokerServer.messageHandler.MessageHandler;
+
 @Service
-public class SimpleServerWebSocketHandler extends TextWebSocketHandler {
+public class SimpleServerWebSocketHandler extends TextWebSocketHandler  {
 
     @Autowired
     private RandomTimeResponderSimulator randomTicker;
-
+    
+    @Autowired
+    private MessageHandler handler;
+    
+    @Autowired
+    MessageConverter converter;
+    
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         randomTicker.addSession(session);
@@ -23,7 +32,7 @@ public class SimpleServerWebSocketHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
 
         if (!payload.isEmpty()) {
-            randomTicker.broadcast("Server received : " + payload);
+        	handler.handleMessage(converter.convert(message));
         }
 
     }
