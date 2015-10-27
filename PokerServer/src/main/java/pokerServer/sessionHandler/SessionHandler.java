@@ -6,11 +6,9 @@ import pokerServer.Client.Client;
 
 public interface SessionHandler {
 
-	void addSession(Client client) throws Exception;
+	void addClient(Client client) throws Exception;
 
-	void removeSession(String id);
-
-	void broadcast(String message) throws Exception;
+	void removeClient(String id);
 
 	Client getClientFromSession(WebSocketSession s);
 

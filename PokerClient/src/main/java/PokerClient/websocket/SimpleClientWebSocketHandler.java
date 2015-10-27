@@ -7,6 +7,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import PokerClient.controller.MainWindowController;
+import PokerClient.messageConverter.MessageConverter;
+import PokerClient.messageHandler.MessageHandler;
 
 
 public class SimpleClientWebSocketHandler extends TextWebSocketHandler {
@@ -14,8 +16,12 @@ public class SimpleClientWebSocketHandler extends TextWebSocketHandler {
 
 
     private WebSocketSession session;
+
     @Autowired
-    MainWindowController controller;
+    MessageConverter converter;
+
+    @Autowired
+    MessageHandler handler;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -24,8 +30,8 @@ public class SimpleClientWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+    	handler.handleMessage(converter.convert(message));
 
-    	controller.serverResposne(message.getPayload());
     }
 
     @Override

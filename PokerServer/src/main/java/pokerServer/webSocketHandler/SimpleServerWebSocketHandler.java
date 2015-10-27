@@ -1,6 +1,7 @@
 package pokerServer.webSocketHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -8,6 +9,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import pokerServer.Client.Client;
+import pokerServer.broadcaster.Broadcast;
 import pokerServer.messageConverter.MessageConverter;
 import pokerServer.messageHandler.MessageHandler;
 import pokerServer.sessionHandler.SessionHandler;
@@ -22,11 +24,15 @@ public class SimpleServerWebSocketHandler extends TextWebSocketHandler  {
     private MessageHandler messageHandler;
     
     @Autowired
-    MessageConverter messageConverter;
+    private MessageConverter messageConverter;
+    
+
     
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-    	sessionHandler.addSession(new Client(session));
+    	sessionHandler.addClient(new Client(session));
+    
+    	
     }
 
     @Override
@@ -41,6 +47,6 @@ public class SimpleServerWebSocketHandler extends TextWebSocketHandler  {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-    	sessionHandler.removeSession(session.getId());
+    	sessionHandler.removeClient(session.getId());
     }
 }
