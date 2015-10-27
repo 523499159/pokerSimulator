@@ -1,4 +1,4 @@
-package pokerServer;
+package pokerServer.webSocketHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,24 +7,26 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import pokerServer.Client.Client;
 import pokerServer.messageConverter.MessageConverter;
 import pokerServer.messageHandler.MessageHandler;
+import pokerServer.sessionHandler.SessionHandler;
 
 @Service
 public class SimpleServerWebSocketHandler extends TextWebSocketHandler  {
 
     @Autowired
-    private RandomTimeResponderSimulator randomTicker;
+    private SessionHandler sessionHandler;
     
     @Autowired
-    private MessageHandler handler;
+    private MessageHandler messageHandler;
     
     @Autowired
-    MessageConverter converter;
+    MessageConverter messageConverter;
     
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        randomTicker.addSession(session);
+    	sessionHandler.addSession(new Client(session));
     }
 
     @Override
@@ -32,13 +34,13 @@ public class SimpleServerWebSocketHandler extends TextWebSocketHandler  {
         String payload = message.getPayload();
 
         if (!payload.isEmpty()) {
-        	handler.handleMessage(converter.convert(message));
+        	messageHandler.handleMessage(messageConverter.convert(message,session));
         }
 
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        randomTicker.removeSession(session.getId());
+    	sessionHandler.removeSession(session.getId());
     }
 }

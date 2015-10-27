@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import pokerServer.RandomTimeResponderSimulator;
 import pokerServer.messageHandler.MessageHandler;
 import pokerServer.messages.IntroduceMessage;
 import pokerServer.messages.Message;
+import pokerServer.sessionHandler.SessionHandler;
 
 @Service
 public class MessageHandlerImpl implements MessageHandler {
     @Autowired
-    private RandomTimeResponderSimulator randomTicker;
+    private SessionHandler sessionHandler;
 
 	@Override
 	public void handleMessage(Message message) {
@@ -25,7 +25,9 @@ public class MessageHandlerImpl implements MessageHandler {
 		
 		private void handleIntro(IntroduceMessage intro){
 			try {
-				randomTicker.broadcast("Witamy w grze: "+intro.getName());
+				sessionHandler.broadcast("Witamy w grze: "+intro.getName());
+				sessionHandler.getClientFromSession(intro.getSession())
+				.introduceAndReadyForPlay(intro.getName());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
