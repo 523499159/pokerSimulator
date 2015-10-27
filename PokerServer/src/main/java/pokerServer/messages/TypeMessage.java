@@ -5,7 +5,6 @@ public enum TypeMessage {
 	DECISION,
 	WAIT,
 	CARD,
-	WINNER
 	
 
 }

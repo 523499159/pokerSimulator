@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import PokerClient.controller.MainWindowController;
+import PokerClient.message.CardMessage;
 import PokerClient.message.Message;
 import PokerClient.message.SimpleMessage;
 import PokerClient.messageHandler.MessageHandler;
@@ -25,6 +26,18 @@ MainWindowController controller;
 			SimpleMessage simple = (SimpleMessage) message;
 		handleSimple(simple);
 		}
+
+		if (message instanceof CardMessage) {
+			CardMessage card = (CardMessage) message;
+		handleCard(card);
+		}
+
+
+	}
+
+		private void handleCard(CardMessage card) {
+			controller.addCardToHand(card.getCard());
+
 	}
 
 		private void handleSimple(SimpleMessage simp){

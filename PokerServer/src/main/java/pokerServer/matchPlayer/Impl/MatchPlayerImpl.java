@@ -28,7 +28,7 @@ public class MatchPlayerImpl implements MatchPlayer{
 	
 	@Override
 	public void playMatch(List<Client> players) throws Exception {
-
+		System.out.println("Play Match");
 		match.initializeNewMatch(players);
 		System.out.println("INIT");
 		preRound(players);
@@ -44,8 +44,8 @@ public class MatchPlayerImpl implements MatchPlayer{
 	
 	private void preRound(List<Client> players) throws Exception{
 		broadcaster.broadcast("Rozpocznamy mecz", players);	
-		broadcaster.broadcast("@BLIND:@SMALLBLIND:"+match.getSmallBlind(), players);		
-		broadcaster.broadcast("@BLIND:@BIGBLIND:: "+match.getBigBlind(), players);		
+		broadcaster.broadcast("@SMALLBLIND:"+match.getSmallBlind(), players);		
+		broadcaster.broadcast("@BIGBLIND:: "+match.getBigBlind(), players);		
 		Client dealer=match.getDealer();		
 		setIndexes(players.indexOf(dealer), players);			
 	}

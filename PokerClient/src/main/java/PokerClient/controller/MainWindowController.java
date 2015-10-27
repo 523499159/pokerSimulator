@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 
+import PokerClient.Card.Card;
 import PokerClient.service.MainWindowService;
 import PokerClient.websocket.SimpleClientWebSocketHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ListView;
 
 
 
@@ -35,11 +38,15 @@ public class MainWindowController  {
 
 	@FXML TextArea serverResponseView;
 
+	@FXML ListView<String> cardInHand;
+
     @Autowired
     MainWindowController(MainWindowService mainWindowService) {
 
         this.mainWindowService = mainWindowService;
     }
+
+
 
 
 
@@ -60,6 +67,10 @@ public class MainWindowController  {
 	}
 
 
+	public void addCardToHand(Card c){
+		cardInHand.getItems().add(c.toString());
+
+	}
 
 
 
