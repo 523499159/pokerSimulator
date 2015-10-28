@@ -9,6 +9,7 @@ import PokerClient.message.BlindValueMessage;
 import PokerClient.message.CardMessage;
 import PokerClient.message.CardPlace;
 import PokerClient.message.Message;
+import PokerClient.message.PlayerMessage;
 import PokerClient.message.SimpleMessage;
 import PokerClient.messageHandler.MessageHandler;
 import javafx.application.Platform;
@@ -26,6 +27,17 @@ public class MessageHandlerImpl implements MessageHandler {
 			SimpleMessage simple = (SimpleMessage) message;
 			handleSimple(simple);
 		}
+
+		if (message instanceof PlayerMessage) {
+			PlayerMessage msg = (PlayerMessage) message;
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					handlePlayer(msg);
+				}
+			});
+		}
+
 
 		if (message instanceof CardMessage) {
 			CardMessage card = (CardMessage) message;
@@ -78,6 +90,10 @@ public class MessageHandlerImpl implements MessageHandler {
 
 	private void handleSimple(SimpleMessage simp) {
 		controller.serverResposne(simp.getText());
+
+	}
+	private void handlePlayer(PlayerMessage msg) {
+		controller.addPlayerToMatch(msg.getPlayerName());
 
 	}
 

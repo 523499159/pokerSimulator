@@ -27,30 +27,35 @@ public class MatchPlayerImpl implements MatchPlayer{
 	private int bigBlindIdx;
 	private List<Message> roundResponses;
 	private List<Card> table;
-	
+	private List<Client> players;
 	
 	@Override
 	public void playMatch(List<Client> players) throws Exception {
 		roundResponses=new ArrayList<Message>();
 		table =new ArrayList<Card>();
-		
+		this.players=players;
 		System.out.println("Play Match");
 		match.initializeNewMatch(players);
 		System.out.println("INIT");
-		preRound(players);
+		notifyAboutOtherPlayers();
+		preRound();
 		System.out.println("AFTER PRE");
-		giveTwoCards(players);
+		giveTwoCards();
 		System.out.println("AFTER GIVE TWO");
-		startLicitation(players);
+		startLicitation();
 		System.out.println("AFTER first licitation");
-		turnCard(3, players);
+		turnCard(3);
 		System.out.println("AFTER FLOP");
 	
 	
 	}
 
-	
-	private void preRound(List<Client> players) throws Exception{
+	private void notifyAboutOtherPlayers() throws Exception{
+		for(Client c:players){
+			broadcaster.broadcast("@PLAYER:"+c.getName(), players,c);		
+		}
+	}
+	private void preRound() throws Exception{
 		broadcaster.broadcast("Rozpocznamy mecz", players);	
 		broadcaster.broadcast("@SMALLBLIND:"+match.getSmallBlind(), players);		
 		broadcaster.broadcast("@BIGBLIND: "+match.getBigBlind(), players);		
@@ -68,7 +73,7 @@ public class MatchPlayerImpl implements MatchPlayer{
 		broadcaster.broadcast(players.get(bigBlindIdx).getName()+" placi duza ciemna "+match.getBigBlind(), players);
 	}
 	
-	private void giveTwoCards(List<Client> players) throws Exception{
+	private void giveTwoCards() throws Exception{
 		match.giveCardsForPlayers();
 		for(Client c:players){
 			broadcaster.broadcast("@CARD:"+c.getHand()[0],c);
@@ -87,6 +92,8 @@ public class MatchPlayerImpl implements MatchPlayer{
 
 	
 	private void clientPass(Client c){
+		
+		players.remove(c);
 
 		
 	}
@@ -101,7 +108,7 @@ public class MatchPlayerImpl implements MatchPlayer{
 		
 	}
 	
-	private void turnCard(int cardsToTurn,List<Client> players ) throws Exception{
+	private void turnCard(int cardsToTurn) throws Exception{
 		match.getRandomCardFromCurrentDeck();
 		for(int i=0;i<cardsToTurn;i++){
 		
@@ -141,7 +148,7 @@ public class MatchPlayerImpl implements MatchPlayer{
 		
 	}
 	
-	private void startLicitation(List<Client> players) throws Exception{
+	private void startLicitation() throws Exception{
 		Client underTheGun=nextClient(players.get(bigBlindIdx), players);
 		notifyAndWaitForTurn(underTheGun,players);
 	}

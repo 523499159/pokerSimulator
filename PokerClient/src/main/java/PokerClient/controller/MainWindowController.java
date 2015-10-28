@@ -51,6 +51,8 @@ public class MainWindowController  {
 
 	@FXML ListView<String> tableOfCards;
 
+	@FXML ListView<String> playersAtMatch;
+
     @Autowired
     MainWindowController(MainWindowService mainWindowService) {
 
@@ -149,4 +151,8 @@ public void initialize(){
 
 	}
 
+
+	public void addPlayerToMatch(String name){
+		playersAtMatch.getItems().add(name);
+	}
 }
