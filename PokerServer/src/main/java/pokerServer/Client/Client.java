@@ -11,7 +11,8 @@ public class Client {
 	private String name;
 	private WebSocketSession session;
 	private Boolean readyForPlay;
-	private Card[] hand;	
+	private Card[] hand;
+	private double moneyPutInSingnleRound;
 	
 	
 	public Client(WebSocketSession session) {
@@ -66,6 +67,22 @@ public class Client {
 		readyForPlay=true;
 	}
 	
+	public void clearMoneyPutedInRound(){
+		moneyPutInSingnleRound=0;
+	}
+	public void addToMoneyPutedInRound(Double d){
+		moneyPutInSingnleRound=moneyPutInSingnleRound+d;
+	}
+
+
+	public double getMoneyPutInSingnleRound() {
+		return moneyPutInSingnleRound;
+	}
+
+
+	public void setMoneyPutInSingnleRound(double moneyPutInSingnleRound) {
+		this.moneyPutInSingnleRound = moneyPutInSingnleRound;
+	}
 	
 
 }

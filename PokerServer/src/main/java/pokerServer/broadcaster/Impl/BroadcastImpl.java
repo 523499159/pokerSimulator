@@ -29,5 +29,15 @@ public class BroadcastImpl implements Broadcast {
         c.getSession().sendMessage(textMessage);
   
 	}
+
+	@Override
+	public void broadcast(String message, List<Client> reciver, Client except) throws Exception {
+	      TextMessage textMessage = new TextMessage(message);
+	        for (Client client : reciver) {
+	        	if(!client.getSession().equals(except.getSession())){
+	            client.getSession().sendMessage(textMessage);
+	        	}
+	        }
+	}
 	
 }

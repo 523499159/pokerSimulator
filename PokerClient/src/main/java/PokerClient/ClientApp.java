@@ -50,7 +50,7 @@ public class ClientApp extends Application {
 	}
 
 	public static Object load(String name) {
-		
+
 		try (InputStream fxmlStream = ClientApp.class.getResource("fxml/" + name + ".fxml").openStream()) {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setControllerFactory(applicationContext::getBean);
@@ -64,5 +64,5 @@ public class ClientApp extends Application {
         super.stop();
         applicationContext.close();
     }
-    
+
 }

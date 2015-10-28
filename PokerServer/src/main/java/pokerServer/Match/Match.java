@@ -38,9 +38,12 @@ public class Match implements TableOperator {
 	public void initializeNewMatch(List<Client> players){
 
 	inititalizeBlinds();
+	System.out.println("init blinds");
 	initlizeDeck();
+	System.out.println("init deck");
 	this.players=players;
 	dealer=chooseDealer();
+	System.out.println("dealer CHoosen");
 
 	}
 
@@ -61,7 +64,8 @@ public class Match implements TableOperator {
 	}
 	@Override
 	public Client chooseDealer() {
-		int random=ThreadLocalRandom.current().nextInt(0, players.size()+1);
+		int random=ThreadLocalRandom.current().nextInt(0, players.size());
+		System.out.println("chosen dealer idx:"+random);
 		return players.get(random);
 	}
 	@Override
@@ -113,7 +117,7 @@ public class Match implements TableOperator {
 	}
 
 	public Card getRandomCardFromCurrentDeck(){
-		int random=ThreadLocalRandom.current().nextInt(0, cards.size()+1);
+		int random=ThreadLocalRandom.current().nextInt(0, cards.size());
 		Card c= cards.remove(random);
 		return c;
 	}

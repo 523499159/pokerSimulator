@@ -12,6 +12,7 @@ import pokerServer.Client.Client;
 import pokerServer.broadcaster.Broadcast;
 import pokerServer.messageConverter.MessageConverter;
 import pokerServer.messageHandler.MessageHandler;
+import pokerServer.messages.Message;
 import pokerServer.sessionHandler.SessionHandler;
 
 @Service
@@ -40,7 +41,11 @@ public class SimpleServerWebSocketHandler extends TextWebSocketHandler  {
         String payload = message.getPayload();
 
         if (!payload.isEmpty()) {
-        	messageHandler.handleMessage(messageConverter.convert(message,session));
+        	   System.out.println("SERVER GET MSG :"+message.getPayload());
+        	   Message converted=messageConverter.convert(message,session);
+        	 
+        	messageHandler.handleMessage(converted);
+     
         }
 
     }

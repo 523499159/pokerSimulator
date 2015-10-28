@@ -10,6 +10,7 @@ import PokerClient.Card.Suit;
 import PokerClient.message.BlindType;
 import PokerClient.message.BlindValueMessage;
 import PokerClient.message.CardMessage;
+import PokerClient.message.CardPlace;
 import PokerClient.message.Message;
 import PokerClient.message.SimpleMessage;
 import PokerClient.messageConverter.MessageConverter;
@@ -35,10 +36,19 @@ public class MessageConverterImpl implements MessageConverter {
 			}
 			if(marker.equals("@CARD")){
 				return new CardMessage(
-						new Card(Rank.valueOf(data[1]),Suit.valueOf(data[2]))
+						new Card(Rank.valueOf(data[1]),Suit.valueOf(data[2])),CardPlace.HAND
+						);
+			}
+			if(marker.equals("@TABLE")){
+				String tablePointer=data[1];
+				if(tablePointer.equals("@CARD")){
+
+				return new CardMessage(
+						new Card(Rank.valueOf(data[2]),Suit.valueOf(data[3])),CardPlace.TABLE
 						);
 			}
 
+		}
 		}
 
 

@@ -5,9 +5,12 @@ import org.springframework.stereotype.Service;
 
 import pokerServer.Client.Client;
 import pokerServer.broadcaster.Broadcast;
+import pokerServer.matchPlayer.MatchPlayer;
 import pokerServer.messageHandler.MessageHandler;
+import pokerServer.messages.DecisionMessage;
 import pokerServer.messages.IntroduceMessage;
 import pokerServer.messages.Message;
+import pokerServer.messages.TypeMessage;
 import pokerServer.sessionHandler.SessionHandler;
 
 @Service
@@ -18,15 +21,30 @@ public class MessageHandlerImpl implements MessageHandler {
     @Autowired
     Broadcast broadcaster;
     
+    @Autowired
+    MatchPlayer playedMatch;
+    
 	@Override
 	public void handleMessage(Message message) {
 	
-		if (message instanceof IntroduceMessage) {
+		if (message.getType().equals(TypeMessage.INTRODUCE)) {
 		IntroduceMessage intro = (IntroduceMessage) message;
 		handleIntro(intro);
 		}
+
+		if (message.getType().equals(TypeMessage.DECISION)) {
+			DecisionMessage msg = (DecisionMessage) message;
+		handleDecision(msg);
+		}
 	}
 		
+		private void handleDecision(DecisionMessage msg) {
+			playedMatch.addDecision(msg);
+
+			
+		
+	}
+
 		private void handleIntro(IntroduceMessage intro){
 			try {
 				Client c=sessionHandler.getClientFromSession(intro.getSession());

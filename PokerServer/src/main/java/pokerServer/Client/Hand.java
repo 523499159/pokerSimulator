@@ -155,8 +155,8 @@ public class Hand implements Comparable<Hand> {
 
 			@Override
 			public int compare(Entry<Rank, Integer> o1, Entry<Rank, Integer> o2) {
-				int val=(int) o1.getValue();
-				int val2=(int) o2.getValue();
+				Integer val=o1.getValue();
+				Integer val2=o2.getValue();
 				if(val==val2){
 					return o1.getKey().compareTo(o2.getKey())*(-1);
 				}
