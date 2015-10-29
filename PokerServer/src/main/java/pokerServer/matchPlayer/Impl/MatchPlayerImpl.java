@@ -58,7 +58,8 @@ public class MatchPlayerImpl implements MatchPlayer{
 	private void preRound() throws Exception{
 		broadcaster.broadcast("Rozpocznamy mecz", players);	
 		broadcaster.broadcast("@SMALLBLIND:"+match.getSmallBlind(), players);		
-		broadcaster.broadcast("@BIGBLIND: "+match.getBigBlind(), players);		
+		broadcaster.broadcast("@BIGBLIND: "+match.getBigBlind(), players);	
+		broadcaster.broadcast("@STARTMONEY: "+match.getMoneyOnStart(), players);	
 		Client dealer=match.getDealer();		
 		setIndexes(players.indexOf(dealer), players);			
 	}

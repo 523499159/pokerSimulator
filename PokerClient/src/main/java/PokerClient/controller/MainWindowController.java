@@ -53,6 +53,12 @@ public class MainWindowController  {
 
 	@FXML ListView<String> playersAtMatch;
 
+	@FXML Label moneyWallet;
+
+	@FXML Label moneyOnTable;
+
+	@FXML Label alreadyPut;
+
     @Autowired
     MainWindowController(MainWindowService mainWindowService) {
 
@@ -99,6 +105,9 @@ public void initialize(){
 		bigBlindLabel.setText(val+"");
 	}
 
+	public void setMoneyWallet(Double val){
+		moneyWallet.setText(val+"");
+	}
 
 	@FXML public void passAction(ActionEvent event) {
 		 sendMsgToServer("@DECISION:@PASS");

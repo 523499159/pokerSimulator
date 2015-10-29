@@ -1,9 +1,6 @@
 package pokerServer.Client;
 
-import java.util.List;
-
 import org.springframework.web.socket.WebSocketSession;
-
 import pokerServer.Deck.Card.Card;
 
 public class Client {
@@ -11,6 +8,7 @@ public class Client {
 	private String name;
 	private WebSocketSession session;
 	private Boolean readyForPlay;
+	private Double money;
 	private Card[] hand;
 	private double moneyPutInSingnleRound;
 	
@@ -31,6 +29,16 @@ public class Client {
 	}
 	
 	
+
+
+	public Double getMoney() {
+		return money;
+	}
+
+
+	public void setMoney(Double money) {
+		this.money = money;
+	}
 
 
 	public Card[] getHand() {

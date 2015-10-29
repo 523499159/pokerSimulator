@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import pokerServer.Client.Client;
@@ -20,8 +21,16 @@ public class Match implements TableOperator {
 	
 	private List<Card> cards;
 	private List<Client> players;
+	
+	@Value("${smallBlind}")
 	private double smallBlind;
+	
+	@Value("${bigBlind}")
 	private double bigBlind;
+	
+	@Value("${playersMoneyStart}")
+	private double moneyOnStart;
+	
 	private Client winner;
 	private Client dealer;
 	private double moneyOnTable;
@@ -37,8 +46,6 @@ public class Match implements TableOperator {
 	@Override
 	public void initializeNewMatch(List<Client> players){
 
-	inititalizeBlinds();
-	System.out.println("init blinds");
 	initlizeDeck();
 	System.out.println("init deck");
 	this.players=players;
@@ -47,6 +54,18 @@ public class Match implements TableOperator {
 
 	}
 
+	public double getMoneyOnStart() {
+		return moneyOnStart;
+	}
+	public void setMoneyOnStart(double moneyOnStart) {
+		this.moneyOnStart = moneyOnStart;
+	}
+	public double getMoneyOnTable() {
+		return moneyOnTable;
+	}
+	public void setMoneyOnTable(double moneyOnTable) {
+		this.moneyOnTable = moneyOnTable;
+	}
 	private void initlizeDeck(){
 		cards=deck.getRandomizedCards();
 	}

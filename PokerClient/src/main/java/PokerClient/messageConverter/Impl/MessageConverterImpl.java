@@ -7,8 +7,8 @@ import org.springframework.web.socket.TextMessage;
 import PokerClient.Card.Card;
 import PokerClient.Card.Rank;
 import PokerClient.Card.Suit;
-import PokerClient.message.BlindType;
-import PokerClient.message.BlindValueMessage;
+import PokerClient.message.MoneyMessageType;
+import PokerClient.message.MoneyMessage;
 import PokerClient.message.CardMessage;
 import PokerClient.message.CardPlace;
 import PokerClient.message.Message;
@@ -30,11 +30,16 @@ public class MessageConverterImpl implements MessageConverter {
 		}
 		if(marker.contains("@")){
 			if(marker.equals("@SMALLBLIND")){
-				return new BlindValueMessage(BlindType.SMALL, Double.parseDouble(data[1]));
+				return new MoneyMessage(MoneyMessageType.SMALL, Double.parseDouble(data[1]));
 			}
 			if(marker.equals("@BIGBLIND")){
-				return new BlindValueMessage(BlindType.BIG, Double.parseDouble(data[1]));
+				return new MoneyMessage(MoneyMessageType.BIG, Double.parseDouble(data[1]));
 			}
+
+			if(marker.equals("@STARTMONEY")){
+				return new MoneyMessage(MoneyMessageType.START, Double.parseDouble(data[1]));
+			}
+
 			if(marker.equals("@CARD")){
 				return new CardMessage(
 						new Card(Rank.valueOf(data[1]),Suit.valueOf(data[2])),CardPlace.HAND

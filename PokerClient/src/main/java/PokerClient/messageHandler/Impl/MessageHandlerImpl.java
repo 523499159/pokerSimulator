@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import PokerClient.controller.MainWindowController;
-import PokerClient.message.BlindType;
-import PokerClient.message.BlindValueMessage;
+import PokerClient.message.MoneyMessageType;
+import PokerClient.message.MoneyMessage;
 import PokerClient.message.CardMessage;
 import PokerClient.message.CardPlace;
 import PokerClient.message.Message;
@@ -49,12 +49,12 @@ public class MessageHandlerImpl implements MessageHandler {
 			});
 		}
 
-		if (message instanceof BlindValueMessage) {
-			BlindValueMessage msg = (BlindValueMessage) message;
+		if (message instanceof MoneyMessage) {
+			MoneyMessage msg = (MoneyMessage) message;
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					handleBlind(msg);
+					handleMoney(msg);
 				}
 			});
 
@@ -76,14 +76,18 @@ public class MessageHandlerImpl implements MessageHandler {
 
 	}
 
-	private void handleBlind(BlindValueMessage msg) {
+	private void handleMoney(MoneyMessage msg) {
 
-		if (msg.getTypeBlind().equals(BlindType.BIG)) {
+		if (msg.getTypeBlind().equals(MoneyMessageType.BIG)) {
 			controller.setBigBlind(msg.getValue());
 		}
 
-		if (msg.getTypeBlind().equals(BlindType.SMALL)) {
+		if (msg.getTypeBlind().equals(MoneyMessageType.SMALL)) {
 			controller.setSmallBlind(msg.getValue());
+		}
+
+		if (msg.getTypeBlind().equals(MoneyMessageType.START)){
+			controller.setMoneyWallet(msg.getValue());
 		}
 
 	}

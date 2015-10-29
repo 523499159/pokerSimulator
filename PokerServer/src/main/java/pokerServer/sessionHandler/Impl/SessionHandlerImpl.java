@@ -86,7 +86,7 @@ public class SessionHandlerImpl implements SessionHandler {
 	private void waitingMoment() throws Exception {
 		List<Client> readyPlayers = getReadyPlayers();
 		if (readyPlayers.size() == 1) {
-		broadcast("Musisz poczekac na innech graczy.", readyPlayers);
+		broadcast("Musisz poczekac na innych graczy.", readyPlayers);
 
 		}
 		if (readyPlayers.size() >= 2 && !matchStarted) {
