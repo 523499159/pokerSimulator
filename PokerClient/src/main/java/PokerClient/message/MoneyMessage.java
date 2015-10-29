@@ -12,7 +12,7 @@ public class MoneyMessage extends Message {
 				this.value = value;
 			}
 
-			public MoneyMessageType getTypeBlind() {
+			public MoneyMessageType getTypeMoneyMSG() {
 				return typeMoney;
 			}
 

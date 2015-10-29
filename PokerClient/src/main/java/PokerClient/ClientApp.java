@@ -59,6 +59,7 @@ public class ClientApp extends Application {
 			throw new RuntimeException(ioException);
 		}
 	}
+
     @Override
     public void stop() throws Exception {
         super.stop();

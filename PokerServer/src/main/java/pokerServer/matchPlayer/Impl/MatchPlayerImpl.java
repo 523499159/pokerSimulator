@@ -28,17 +28,24 @@ public class MatchPlayerImpl implements MatchPlayer{
 	private List<Message> roundResponses;
 	private List<Card> table;
 	private List<Client> players;
+	private double currentPot;
+	
 	
 	@Override
 	public void playMatch(List<Client> players) throws Exception {
 		roundResponses=new ArrayList<Message>();
+		
 		table =new ArrayList<Card>();
 		this.players=players;
+		initPlayersWallets(match);
 		System.out.println("Play Match");
 		match.initializeNewMatch(players);
+		currentPot=0;
 		System.out.println("INIT");
 		notifyAboutOtherPlayers();
 		preRound();
+		getBlindsFromClient(smallBlindIdx, bigBlindIdx);
+		getMaxPutOnTable();
 		System.out.println("AFTER PRE");
 		giveTwoCards();
 		System.out.println("AFTER GIVE TWO");
@@ -57,11 +64,18 @@ public class MatchPlayerImpl implements MatchPlayer{
 	}
 	private void preRound() throws Exception{
 		broadcaster.broadcast("Rozpocznamy mecz", players);	
-		broadcaster.broadcast("@SMALLBLIND:"+match.getSmallBlind(), players);		
-		broadcaster.broadcast("@BIGBLIND: "+match.getBigBlind(), players);	
-		broadcaster.broadcast("@STARTMONEY: "+match.getMoneyOnStart(), players);	
+		broadcaster.broadcast("@MONEY:@SMALLBLIND:"+match.getSmallBlind(), players);		
+		broadcaster.broadcast("@MONEY:@BIGBLIND: "+match.getBigBlind(), players);	
+	
 		Client dealer=match.getDealer();		
 		setIndexes(players.indexOf(dealer), players);			
+	}
+	private void initPlayersWallets(Match m) throws Exception{
+		for(Client c:players){
+			c.setMoney(m.getMoneyOnStart());
+			broadcaster.broadcast("@MONEY:@WALLET_START:"+c.getMoney(), c);
+		}
+		
 	}
 	
 	private void setIndexes(int dealer, List<Client> players) throws Exception{
@@ -72,6 +86,37 @@ public class MatchPlayerImpl implements MatchPlayer{
 		bigBlindIdx=(currentDealerIdx+2)%(players.size());
 		broadcaster.broadcast(players.get(smallBlindIdx).getName()+" placi mala ciemna "+match.getSmallBlind(), players);
 		broadcaster.broadcast(players.get(bigBlindIdx).getName()+" placi duza ciemna "+match.getBigBlind(), players);
+	}
+	
+	private void getBlindsFromClient(int smallBlindIdx,int bigBlindIdx) throws Exception{
+		
+		Client onSmall=players.get(smallBlindIdx);
+		double sm=onSmall.getMoney()-match.getSmallBlind();
+		onSmall.setMoney(sm);
+		
+		Client onBig=players.get(bigBlindIdx);
+		double bg=onBig.getMoney()-match.getBigBlind();
+		onBig.setMoney(bg);
+		
+		increasePot(match.getSmallBlind());
+		increasePot(match.getBigBlind());
+		
+		broadcaster.broadcast("@MONEY:@WALLET:"+onSmall.getMoney(), onSmall);
+		broadcaster.broadcast("@MONEY:@WALLET:"+onBig.getMoney(), onBig);
+		
+		onSmall.addToMoneyPutedInRound(match.getSmallBlind());
+		onBig.addToMoneyPutedInRound(match.getBigBlind());
+		
+		broadcaster.broadcast("@TABLE:@MONEY:"+(currentPot), players);
+	}
+	
+	private void getMaxPutOnTable() throws Exception{
+		
+		Client maxPut = players.stream()
+                 .max((p1, p2) -> Double.compare(p1.getMoneyPutInSingnleRound(), p2.getMoneyPutInSingnleRound()))
+                 .get();
+		System.out.println("MAX PUT _> "+maxPut.getMoneyPutInSingnleRound());
+		broadcaster.broadcast("@MONEY:@CURRENT_BET:"+maxPut.getMoneyPutInSingnleRound(), players);
 	}
 	
 	private void giveTwoCards() throws Exception{
@@ -108,7 +153,9 @@ public class MatchPlayerImpl implements MatchPlayer{
 		
 		
 	}
-	
+	private void increasePot(Double d){
+		currentPot=currentPot+d;
+	}
 	private void turnCard(int cardsToTurn) throws Exception{
 		match.getRandomCardFromCurrentDeck();
 		for(int i=0;i<cardsToTurn;i++){
@@ -130,7 +177,7 @@ public class MatchPlayerImpl implements MatchPlayer{
 	}
 	
 	private void notifyAndWaitForTurn(Client c, List<Client> players) throws Exception{
-		broadcaster.broadcast("@YOURTURN", c);
+		broadcaster.broadcast("Teraz Twoja kolej na ruch", c);
 		broadcaster.broadcast("Czekaj, teraz gracz: "+c.getName()+" wykonuje ruch", players, c);
 		Boolean keepWaiting=true;
 		do{

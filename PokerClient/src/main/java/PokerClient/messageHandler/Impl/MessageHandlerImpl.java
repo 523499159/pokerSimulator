@@ -78,17 +78,29 @@ public class MessageHandlerImpl implements MessageHandler {
 
 	private void handleMoney(MoneyMessage msg) {
 
-		if (msg.getTypeBlind().equals(MoneyMessageType.BIG)) {
+		if (msg.getTypeMoneyMSG().equals(MoneyMessageType.BIG)) {
 			controller.setBigBlind(msg.getValue());
 		}
 
-		if (msg.getTypeBlind().equals(MoneyMessageType.SMALL)) {
+		if (msg.getTypeMoneyMSG().equals(MoneyMessageType.SMALL)) {
 			controller.setSmallBlind(msg.getValue());
 		}
 
-		if (msg.getTypeBlind().equals(MoneyMessageType.START)){
+		if (msg.getTypeMoneyMSG().equals(MoneyMessageType.WALLET)){
 			controller.setMoneyWallet(msg.getValue());
 		}
+		if (msg.getTypeMoneyMSG().equals(MoneyMessageType.TABLE)){
+			controller.setMoneyTable(msg.getValue());
+		}
+
+		if (msg.getTypeMoneyMSG().equals(MoneyMessageType.WALLET_START)){
+			controller.setStartMoney(msg.getValue());
+		}
+
+		if (msg.getTypeMoneyMSG().equals(MoneyMessageType.CURRENT_BET)){
+			controller.setMaxPut(msg.getValue());
+		}
+
 
 	}
 

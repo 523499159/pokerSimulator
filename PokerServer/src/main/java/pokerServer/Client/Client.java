@@ -82,7 +82,6 @@ public class Client {
 		moneyPutInSingnleRound=moneyPutInSingnleRound+d;
 	}
 
-
 	public double getMoneyPutInSingnleRound() {
 		return moneyPutInSingnleRound;
 	}

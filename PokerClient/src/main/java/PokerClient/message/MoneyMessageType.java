@@ -1,5 +1,5 @@
 package PokerClient.message;
 
 public enum MoneyMessageType {
-SMALL,BIG,START
+SMALL,BIG,WALLET,WALLET_START,TABLE,CURRENT_BET
 }
