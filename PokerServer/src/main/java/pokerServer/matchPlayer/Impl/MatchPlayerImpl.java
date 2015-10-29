@@ -144,6 +144,8 @@ public class MatchPlayerImpl implements MatchPlayer{
 		
 	}
 	
+	
+	
 	private Boolean checkEqualityMoneyPutOnTable(List<Client> players){
 		return players.stream()
 				.map(p->p.getMoneyPutInSingnleRound())
@@ -197,8 +199,19 @@ public class MatchPlayerImpl implements MatchPlayer{
 	}
 	
 	private void startLicitation() throws Exception{
-		Client underTheGun=nextClient(players.get(bigBlindIdx), players);
-		notifyAndWaitForTurn(underTheGun,players);
+		Client activ=players.get(bigBlindIdx);
+		int idx=0;
+		Boolean cond;
+		do{
+			for(int i=0;i<players.size();i++){
+				idx=players.indexOf(activ);
+				activ=nextClient(players.get(idx), players);
+				notifyAndWaitForTurn(activ, players);
+			}
+			cond=checkResponses(players);
+		}
+		while(!cond);
+
 	}
 	
 	@Override
