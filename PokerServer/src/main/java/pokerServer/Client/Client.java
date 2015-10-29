@@ -79,6 +79,7 @@ public class Client {
 		moneyPutInSingnleRound=0;
 	}
 	public void addToMoneyPutedInRound(Double d){
+		money=money-d;
 		moneyPutInSingnleRound=moneyPutInSingnleRound+d;
 	}
 

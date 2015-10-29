@@ -10,6 +10,7 @@ import pokerServer.messageHandler.MessageHandler;
 import pokerServer.messages.DecisionMessage;
 import pokerServer.messages.IntroduceMessage;
 import pokerServer.messages.Message;
+import pokerServer.messages.PossibleDecisions;
 import pokerServer.messages.TypeMessage;
 import pokerServer.sessionHandler.SessionHandler;
 
@@ -39,8 +40,25 @@ public class MessageHandlerImpl implements MessageHandler {
 	}
 		
 		private void handleDecision(DecisionMessage msg) {
-			playedMatch.addDecision(msg);
+	
 
+			if(msg.getDecision().equals(PossibleDecisions.PASS)){
+				playedMatch.clientPass(msg.getSession());
+			}
+			
+			if(msg.getDecision().equals(PossibleDecisions.CHECK)){
+
+			Client c=playedMatch.getPlayerFromSession(msg.getSession());
+			c.addToMoneyPutedInRound(msg.getValue());
+			
+			
+			}
+			
+			if(msg.getDecision().equals(PossibleDecisions.RAISE)){
+				Client c=playedMatch.getPlayerFromSession(msg.getSession());
+				c.addToMoneyPutedInRound(msg.getValue());
+			}
+			playedMatch.addDecision(msg);
 			
 		
 	}

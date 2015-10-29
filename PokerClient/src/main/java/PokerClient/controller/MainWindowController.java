@@ -88,6 +88,7 @@ public class MainWindowController {
 		smallBlindLabel.setText("0.00");
 		bigBlindLabel.setText("0.00");
 		alreadyPutValue = 0;
+		playersAtMatch.getItems().add("Me");
 	}
 
 	@FXML
@@ -144,14 +145,13 @@ public class MainWindowController {
 	@FXML
 	public void checkAction(ActionEvent event) {
 			double moneyNeedToCheck=maxput-alreadyPutValue;
-		sendMsgToServer("@DECISION:@CHECK:" + 2);
+		sendMsgToServer("@DECISION:@CHECK:" + moneyNeedToCheck);
 
 	}
 
 	@FXML
 	public void raiseAction(ActionEvent event) {
-
-		double raisedValue = 50;
+double raisedValue=Double.parseDouble(raiseValue.getText());
 		sendMsgToServer("@DECISION:@RAISE:" + raisedValue);
 
 	}

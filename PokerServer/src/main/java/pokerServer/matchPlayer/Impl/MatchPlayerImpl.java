@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.WebSocketSession;
+
 import pokerServer.Client.Client;
 import pokerServer.Deck.Card.Card;
 import pokerServer.Match.Match;
@@ -79,7 +81,6 @@ public class MatchPlayerImpl implements MatchPlayer{
 	}
 	
 	private void setIndexes(int dealer, List<Client> players) throws Exception{
-		System.out.println("SendIndexes");
 		currentDealerIdx=dealer;
 		broadcaster.broadcast("Dealerem jest: "+players.get(currentDealerIdx).getName(), players);	
 		smallBlindIdx=(currentDealerIdx+1)%(players.size());
@@ -115,7 +116,6 @@ public class MatchPlayerImpl implements MatchPlayer{
 		Client maxPut = players.stream()
                  .max((p1, p2) -> Double.compare(p1.getMoneyPutInSingnleRound(), p2.getMoneyPutInSingnleRound()))
                  .get();
-		System.out.println("MAX PUT _> "+maxPut.getMoneyPutInSingnleRound());
 		broadcaster.broadcast("@MONEY:@CURRENT_BET:"+maxPut.getMoneyPutInSingnleRound(), players);
 	}
 	
@@ -136,10 +136,15 @@ public class MatchPlayerImpl implements MatchPlayer{
 	}
 	
 
-	
-	private void clientPass(Client c){
+	@Override
+	public void clientPass(WebSocketSession s){
+	Client pass=getPlayerFromSession(s);
 		
-		players.remove(c);
+		players.remove(pass);
+		
+		if(players.size()==1){
+			winnerIs(players.get(0));
+		}
 
 		
 	}
@@ -147,13 +152,16 @@ public class MatchPlayerImpl implements MatchPlayer{
 	
 	
 	private Boolean checkEqualityMoneyPutOnTable(List<Client> players){
-		return players.stream()
-				.map(p->p.getMoneyPutInSingnleRound())
-				.filter(x->x>0).distinct()
-				.collect(Collectors.toList())
-				.size()==1;
-		
-		
+	Boolean res=true;
+	for(int i=1;i<players.size();i++){
+		if(players.get(i).getMoneyPutInSingnleRound()>0 &&players.get(i-1).getMoneyPutInSingnleRound()>0){
+			System.out.println(players.get(i).getMoneyPutInSingnleRound()+"   "+players.get(i-1).getMoneyPutInSingnleRound());
+			if(players.get(i).getMoneyPutInSingnleRound()!=players.get(i-1).getMoneyPutInSingnleRound()){
+				res=false;
+			}
+		}
+	}		
+	return res;
 	}
 	private void increasePot(Double d){
 		currentPot=currentPot+d;
@@ -220,5 +228,11 @@ public class MatchPlayerImpl implements MatchPlayer{
 		roundResponses.add(msg);
 	}
 	
-	
+	private void winnerIs(Client c){
+		
+	}
+	@Override
+	public Client getPlayerFromSession(WebSocketSession s){
+return players.stream().filter(p->p.getSession().equals(s)).findFirst().get();
+	}
 }
