@@ -49,6 +49,11 @@ public class MessageConverterImpl implements MessageConverter {
 			
 				return msg;
 			}
+			if(decision.equals(PossibleDecisions.WAIT)){
+				msg= new DecisionMessage(s, PossibleDecisions.WAIT,0.0 );
+			
+				return msg;
+			}
 		}
 		
 		
