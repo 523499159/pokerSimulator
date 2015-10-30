@@ -74,6 +74,13 @@ public class MainWindowController {
 	private double startMoney;
 	private double alreadyPutValue;
 
+	@FXML Button passButton;
+
+	@FXML Button checkButton;
+
+
+	@FXML Button raiseButton;
+
 
 
 	@Autowired
@@ -203,5 +210,16 @@ double raisedValue=Double.parseDouble(raiseValue.getText());
 	public void setStartMoney(double startMoney) {
 		moneyWallet.setText(startMoney + "");
 		this.startMoney = startMoney;
+	}
+
+	public void enable() {
+		raiseButton.setDisable(false);
+		checkButton.setDisable(false);
+		passButton.setDisable(false);
+	}
+	public void disable() {
+		raiseButton.setDisable(true);
+		checkButton.setDisable(true);
+		passButton.setDisable(true);
 	}
 }

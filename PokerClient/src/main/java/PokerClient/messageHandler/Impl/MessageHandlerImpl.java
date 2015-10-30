@@ -8,9 +8,11 @@ import PokerClient.message.MoneyMessageType;
 import PokerClient.message.MoneyMessage;
 import PokerClient.message.CardMessage;
 import PokerClient.message.CardPlace;
+import PokerClient.message.ChangeStateMessage;
 import PokerClient.message.Message;
 import PokerClient.message.PlayerMessage;
 import PokerClient.message.SimpleMessage;
+import PokerClient.message.State;
 import PokerClient.messageHandler.MessageHandler;
 import javafx.application.Platform;
 
@@ -59,6 +61,30 @@ public class MessageHandlerImpl implements MessageHandler {
 			});
 
 		}
+
+		if (message instanceof ChangeStateMessage) {
+			ChangeStateMessage msg = (ChangeStateMessage) message;
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					handleChangeStateMessage(msg);
+				}
+
+			});
+
+		}
+
+	}
+
+	protected void handleChangeStateMessage(ChangeStateMessage msg) {
+
+			if(msg.getState().equals(State.ENABLE)){
+				controller.enable();
+			}
+			if(msg.getState().equals(State.DISABLE)){
+				controller.disable();
+				}
+
 
 	}
 

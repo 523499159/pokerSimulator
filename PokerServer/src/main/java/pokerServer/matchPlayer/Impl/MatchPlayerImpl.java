@@ -44,17 +44,28 @@ public class MatchPlayerImpl implements MatchPlayer{
 		System.out.println("INIT");
 		notifyAboutOtherPlayers();
 		preRound();
+		
 		getBlindsFromClient(smallBlindIdx, bigBlindIdx);
-		getMaxPutOnTable();
 		System.out.println("AFTER PRE");
 		giveTwoCards();
 		System.out.println("AFTER GIVE TWO");
-		startLicitation();
+		
+		startLicitation(players.get(bigBlindIdx));
 		System.out.println("AFTER first licitation");
 		turnCard(3);
 		System.out.println("AFTER FLOP");
-	
-	
+		
+		startLicitation(players.get(currentDealerIdx));
+		turnCard(1);
+		System.out.println("AFTER ROUND 3");
+		
+		startLicitation(players.get(currentDealerIdx));
+		turnCard(1);
+		System.out.println("AFTER ROUND 4");
+		
+		startLicitation(players.get(currentDealerIdx));
+		System.out.println("AFTER LAST LICITATION");
+		
 	}
 
 	private void notifyAboutOtherPlayers() throws Exception{
@@ -186,7 +197,9 @@ public class MatchPlayerImpl implements MatchPlayer{
 	
 	private void notifyAndWaitForTurn(Client c, List<Client> players) throws Exception{
 		broadcaster.broadcast("Teraz Twoja kolej na ruch", c);
+		broadcaster.broadcast("@CHANGE_STATE:@ENABLE", c);
 		broadcaster.broadcast("Czekaj, teraz gracz: "+c.getName()+" wykonuje ruch", players, c);
+		broadcaster.broadcast("@CHANGE_STATE:@DISABLE", players, c);
 		Boolean keepWaiting=true;
 		do{
 			Thread.sleep(2000);
@@ -204,14 +217,15 @@ public class MatchPlayerImpl implements MatchPlayer{
 		
 	}
 	
-	private void startLicitation() throws Exception{
-		Client activ=players.get(bigBlindIdx);
+	private void startLicitation(Client start) throws Exception{
+		Client activ=start;
 		int idx=0;
 		Boolean cond;
 		do{
 			for(int i=0;i<players.size();i++){
 				idx=players.indexOf(activ);
 				activ=nextClient(players.get(idx), players);
+				getMaxPutOnTable();
 				notifyAndWaitForTurn(activ, players);
 			}
 			cond=checkResponses(players);

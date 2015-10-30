@@ -61,8 +61,7 @@ public class MessageHandlerImpl implements MessageHandler {
 			
 			
 			if(msg.getDecision().equals(PossibleDecisions.WAIT)){
-				Client c=playedMatch.getPlayerFromSession(msg.getSession());
-				c.addToMoneyPutedInRound(msg.getValue());
+
 			}
 			
 			playedMatch.addDecision(msg);

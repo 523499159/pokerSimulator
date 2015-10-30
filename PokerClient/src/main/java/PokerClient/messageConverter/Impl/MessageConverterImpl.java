@@ -10,9 +10,11 @@ import PokerClient.message.MoneyMessageType;
 import PokerClient.message.MoneyMessage;
 import PokerClient.message.CardMessage;
 import PokerClient.message.CardPlace;
+import PokerClient.message.ChangeStateMessage;
 import PokerClient.message.Message;
 import PokerClient.message.PlayerMessage;
 import PokerClient.message.SimpleMessage;
+import PokerClient.message.State;
 import PokerClient.messageConverter.MessageConverter;
 
 @Service
@@ -49,6 +51,18 @@ public class MessageConverterImpl implements MessageConverter {
 					return new MoneyMessage(MoneyMessageType.CURRENT_BET, Double.parseDouble(data[2]));
 				}
 			}
+
+			if(marker.equals("@CHANGE_STATE")){
+
+				String pivot=data[1];
+				if (pivot.equals("@ENABLE")) {
+					return new ChangeStateMessage(State.ENABLE);
+				}
+				if (pivot.equals("@DISABLE")) {
+					return new ChangeStateMessage(State.DISABLE);
+				}
+			}
+
 			if (marker.equals("@CARD")) {
 				return new CardMessage(new Card(Rank.valueOf(data[1]), Suit.valueOf(data[2])), CardPlace.HAND);
 			}

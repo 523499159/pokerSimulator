@@ -63,9 +63,9 @@
          </children>
       </GridPane>
       <ListView fx:id="handCards" layoutX="268.0" layoutY="211.0" prefHeight="52.0" prefWidth="141.0" />
-      <Button layoutX="220.0" layoutY="287.0" mnemonicParsing="false" onAction="#passAction" text="Pasuj" />
-      <Button layoutX="127.0" layoutY="287.0" mnemonicParsing="false" onAction="#checkAction" text="Sprawdz" />
-      <Button layoutX="26.0" layoutY="287.0" mnemonicParsing="false" onAction="#raiseAction" prefHeight="25.0" prefWidth="75.0" text="Podbij" />
+      <Button fx:id="passButton" layoutX="220.0" layoutY="287.0" mnemonicParsing="false" onAction="#passAction" text="Pasuj" />
+      <Button fx:id="checkButton" layoutX="127.0" layoutY="287.0" mnemonicParsing="false" onAction="#checkAction" text="Sprawdz" />
+      <Button fx:id="raiseButton" layoutX="26.0" layoutY="287.0" mnemonicParsing="false" onAction="#raiseAction" prefHeight="25.0" prefWidth="75.0" text="Podbij" />
       <TextField fx:id="raiseValue" alignment="CENTER" layoutX="26.0" layoutY="249.0" prefHeight="25.0" prefWidth="75.0" />
       <TextField fx:id="chackValue" alignment="CENTER" disable="true" layoutX="123.0" layoutY="249.0" prefHeight="25.0" prefWidth="67.0" text="0.0" />
       <ListView fx:id="playersAtMatch" layoutX="424.0" layoutY="58.0" prefHeight="82.0" prefWidth="151.0" />
