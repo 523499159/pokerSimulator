@@ -1,23 +1,27 @@
 package pokerServer.Client;
 
 import org.springframework.web.socket.WebSocketSession;
+
+import pokerServer.Deck.Hand;
 import pokerServer.Deck.Card.Card;
 
-public class Client {
+public class Client implements Comparable<Client> {
 	
 	private String name;
 	private WebSocketSession session;
 	private Boolean readyForPlay;
 	private Double money;
-	private Card[] hand;
+	private Card[] holeCards;
 	private double moneyPutInSingnleRound;
+	private Hand bestCombinationCard;
+	
 	
 	
 	public Client(WebSocketSession session) {
 		super();
 		this.session = session;
 		readyForPlay=false;
-		hand=new Card[2];
+		holeCards=new Card[2];
 	}
 	
 	
@@ -31,6 +35,16 @@ public class Client {
 	
 
 
+	public Hand getBestCombinationCard() {
+		return bestCombinationCard;
+	}
+
+
+	public void setBestCombinationCard(Hand bestCombinationCard) {
+		this.bestCombinationCard = bestCombinationCard;
+	}
+
+
 	public Double getMoney() {
 		return money;
 	}
@@ -42,12 +56,12 @@ public class Client {
 
 
 	public Card[] getHand() {
-		return hand;
+		return holeCards;
 	}
 
 
 	public void setHand(Card[] hand) {
-		this.hand = hand;
+		this.holeCards = hand;
 	}
 
 
@@ -90,6 +104,13 @@ public class Client {
 
 	public void setMoneyPutInSingnleRound(double moneyPutInSingnleRound) {
 		this.moneyPutInSingnleRound = moneyPutInSingnleRound;
+	}
+
+
+	@Override
+	public int compareTo(Client o) {
+
+		return this.getBestCombinationCard().compareTo(o.bestCombinationCard);
 	}
 	
 

@@ -74,14 +74,14 @@ public class MainWindowController {
 	private double startMoney;
 	private double alreadyPutValue;
 
-	@FXML Button passButton;
+	@FXML
+	Button passButton;
 
-	@FXML Button checkButton;
+	@FXML
+	Button checkButton;
 
-
-	@FXML Button raiseButton;
-
-
+	@FXML
+	Button raiseButton;
 
 	@Autowired
 	MainWindowController(MainWindowService mainWindowService) {
@@ -151,15 +151,17 @@ public class MainWindowController {
 
 	@FXML
 	public void checkAction(ActionEvent event) {
-			double moneyNeedToCheck=maxput-alreadyPutValue;
+		double moneyNeedToCheck = maxput - alreadyPutValue;
 		sendMsgToServer("@DECISION:@CHECK:" + moneyNeedToCheck);
+		alreadyPut.setText((alreadyPutValue - moneyNeedToCheck) + "");
 
 	}
 
 	@FXML
 	public void raiseAction(ActionEvent event) {
-double raisedValue=Double.parseDouble(raiseValue.getText());
+		double raisedValue = Double.parseDouble(raiseValue.getText());
 		sendMsgToServer("@DECISION:@RAISE:" + raisedValue);
+		alreadyPut.setText((alreadyPutValue - raisedValue) + "");
 
 	}
 
@@ -197,9 +199,14 @@ double raisedValue=Double.parseDouble(raiseValue.getText());
 
 	public void setMaxput(double maxput) {
 		this.maxput = maxput;
-		double moneyNeedToCheck=maxput-alreadyPutValue;
-		chackValue.setText(moneyNeedToCheck+"");
-		raiseValue.setText((moneyNeedToCheck+(Double.parseDouble(bigBlindLabel.getText())/2))+"");
+		double moneyNeedToCheck=0;;
+		if(maxput>0){
+			moneyNeedToCheck = maxput - alreadyPutValue;
+		}
+
+
+		chackValue.setText(moneyNeedToCheck + "");
+		raiseValue.setText((moneyNeedToCheck + (Double.parseDouble(bigBlindLabel.getText()) / 2)) + "");
 
 	}
 
@@ -217,6 +224,7 @@ double raisedValue=Double.parseDouble(raiseValue.getText());
 		checkButton.setDisable(false);
 		passButton.setDisable(false);
 	}
+
 	public void disable() {
 		raiseButton.setDisable(true);
 		checkButton.setDisable(true);
